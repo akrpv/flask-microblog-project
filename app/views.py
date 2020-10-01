@@ -7,5 +7,4 @@ app.register_blueprint(posts, url_prefix='/blog')
 
 @app.route('/')
 def index():
-    names = ['pidor']
-    return render_template('index.html', n=names)
+    return render_template('index.html')

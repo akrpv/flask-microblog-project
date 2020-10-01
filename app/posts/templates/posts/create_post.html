@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+  Create Post
+{% endblock %}
+
+
+{% block content_title %}
+  New Post
+{% endblock %}
+
+{% block content %}
+
+    <form class="" action="{{ url_for('posts.create_post') }}" method="POST">
+        {% for field in form %}
+          <div class="form-group">
+              {{ field.label(class='control-label') }}
+              {{ field(class='form-control') }}
+          </div>
+        {% endfor %}
+        <input class="btn btn-primary" type="submit" value="Create">
+    </form>
+
+{% endblock %}
