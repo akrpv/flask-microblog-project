@@ -7,6 +7,14 @@ def slugify(s):
     pattern = r'[^\w+]'
     return re.sub(pattern, '-', s)
 
+
+post_tags = db.Table('post_tags',
+    db.Column('post_id', db.Integer, db.ForeignKey('posts.id'), primary_key=True),
+    db.Column('tag_id', db.Integer, db.ForeignKey('tags.id'), primary_key=True)
+)
+
+
+
 class Post(db.Model):
     __tablename__ = 'posts'
 
@@ -15,6 +23,8 @@ class Post(db.Model):
     slug = db.Column(db.String(140), unique=True)
     content = db.Column(db.Text)
     created = db.Column(db.DateTime, default=datetime.now())
+
+    tags = db.relationship('Tag', secondary=post_tags, backref=db.backref('posts', lazy='dynamic'))
 
     def __init__(self, *args, **kwargs):
         super(Post, self).__init__(*args, **kwargs)
@@ -39,4 +49,4 @@ class Tag(db.Model):
         self.slug = slugify(self.name)
 
     def __repr__(self):
-        return '<Tag id: {},  name: {}'.format(self.id, self.name)
+        return '<Tag id: {},  name: {}>'.format(self.id, self.name)
