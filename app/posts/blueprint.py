@@ -22,7 +22,10 @@ def create_post():
 
         try:
             post = Post(title=title, content=content)
-            tag = Tag(name=tag_name)
+            if not Tag.query.filter(Tag.name == tag_name).first():
+                tag = Tag(name=tag_name)
+            else:
+                tag = Tag.query.filter(Tag.name == tag_name).first()
             post.tags.append(tag)
             db.session.add(post)
             db.session.commit()
