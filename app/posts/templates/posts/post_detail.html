@@ -21,4 +21,5 @@
 
     {% endfor %}
   </div>
+  <a href="{{ url_for('posts.edit_post', slug=post.slug)}}">edit</a>
 {% endblock %}
