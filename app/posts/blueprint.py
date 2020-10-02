@@ -8,6 +8,8 @@ from models import Post, Tag
 from app import db
 from .forms import PostForm
 
+import re
+
 
 posts = Blueprint('posts', __name__, template_folder='templates')
 
@@ -18,15 +20,16 @@ def create_post():
     if request.method == 'POST':
         title = request.form['title']
         content = request.form['content']
-        tag_name = request.form['tag']
+        tag_names = re.sub(r'\s+','',request.form['tag']).split(',')
 
         try:
             post = Post(title=title, content=content)
-            if not Tag.query.filter(Tag.name == tag_name).first():
-                tag = Tag(name=tag_name)
-            else:
-                tag = Tag.query.filter(Tag.name == tag_name).first()
-            post.tags.append(tag)
+            for tag_name in tag_names:
+                if not Tag.query.filter(Tag.name == tag_name).first():
+                    tag = Tag(name=tag_name)
+                else:
+                    tag = Tag.query.filter(Tag.name == tag_name).first()
+                post.tags.append(tag)
             db.session.add(post)
             db.session.commit()
         except Exception as e:
