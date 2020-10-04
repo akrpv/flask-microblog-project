@@ -8,6 +8,8 @@ from models import Post, Tag
 from app import db
 from .forms import PostForm
 
+from flask_security import login_required
+
 import re
 
 
@@ -15,6 +17,7 @@ posts = Blueprint('posts', __name__, template_folder='templates')
 
 
 @posts.route('/create', methods=['POST', 'GET'])
+@login_required
 def create_post():
 
     if request.method == 'POST':
@@ -40,6 +43,7 @@ def create_post():
     return render_template('posts/create_post.html', form=form)
 
 @posts.route('/<slug>/edit', methods=['POST', 'GET'])
+@login_required
 def edit_post(slug):
     post = Post.query.filter(Post.slug==slug).first()
 
